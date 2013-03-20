@@ -1,0 +1,40 @@
+                                                                     
+                                                                     
+                                                                     
+                                             
+RewriteEngine on
+
+######### Set cookie, you can replace newsite.com with your domain name and 7200(mins) with some other cache time
+RewriteBase /
+RewriteCond %{QUERY_STRING} no_redirect=true [NC]
+RewriteRule ^(.*)$ - [co=dm_show_classic:true:.newsite.com:7200:/]
+
+# check no 'dm_show_classic' cookie is set
+RewriteCond %{HTTP_COOKIE} !dm_show_classic
+
+# check if no_redirect was sent in the url
+RewriteCond %{QUERY_STRING} !no_redirect=true [NC]
+
+# check if the user agent matches supported mobile devices 
+RewriteCond %{HTTP_USER_AGENT} ((.*iPhone.*)|(.*iPod.*)|(.*BlackBerry.*)|(.*Android.*)|(.*webOS.*)|(.*Windows\ CE.*)|(.*IEMobile.*)|(.*Opera\ Mini.*)|(.*Opera\ Mobi.*)|(.*HTC.*)|(.*LG-.*)|(.*LGE.*)|(.*SAMSUNG.*)|(.*Samsung.*)|(.*Symbian.*)|(.*Nokia.*)|(.*PlayStation.*)|(.*PLAYSTATION.*)|(.*Nintendo\ DSi.*)|(.*TMO-US_LEO.*)|(.*SEC-SGH.*))
+
+# check if the request isn't for a static file
+RewriteCond %{REQUEST_FILENAME} !\.(jpg|gif|png|css|js|txt|ico|pdf|bmp|tif|mp3|wav|wma|asf|mp4|flv|mpg|avi|csv|doc|docx|xls|xlsx|ppt|pptx|zip|rar|tar|gz|dmg|iso)$ [NC]
+
+#### If empty query string then no need to include it ##############
+RewriteCond %{QUERY_STRING} ^$
+
+# extract the current page url including the query string
+RewriteCond http://%{HTTP_HOST}%{REQUEST_URI} ^(.*)$
+
+# redirect the request to mobile domain and pass the page url as a parameter
+RewriteRule ^(.*)$ http://mysite.com?url=%1 [R=301,L]
+
+#### Otherwise if query string not empty, then include query string  ##############
+RewriteCond %{QUERY_STRING} !^$
+
+# extract the current page url including the query string
+RewriteCond http://%{HTTP_HOST}%{REQUEST_URI}?%{QUERY_STRING} ^(.*)$
+
+# redirect the request to mobile domain and pass the page url as a parameter
+RewriteRule ^(.*)$ http://mysite.com?url=%1 [R=301,L]

@@ -1,0 +1,17 @@
+﻿@{
+    // Set our AccountSid and AuthToken
+    string sid = "AC123";
+    string token = "abcd";
+
+    // Instantiate a new Twilio Rest Client
+    var client = new Twilio.TwilioRestClient(sid, token);    
+    
+    try {
+        // Get Recent Calls
+        foreach (var call in client.ListCalls().Calls) {
+            Response.Write(string.Format("Call from {0} to {1} at {2} of length {3}\r\n", new object[] { call.From, call.To, call.StartTime, call.Duration} ));
+        }
+    } catch (Exception e) {
+        Response.Write(string.Format("Error: {0}", e.Message));
+    }    
+}

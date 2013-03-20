@@ -1,0 +1,25 @@
+﻿@{
+    // Set our Account SID and AuthToken
+    string sid = "AC123";
+    string token = "abcd";
+     
+    // A phone number you have previously validated with Twilio
+    string phonenumber = "4151234567";
+     
+    // Instantiate a new Twilio Rest Client
+    var client = new Twilio.TwilioRestClient(sid, token);
+ 
+    try {
+        // Initiate a new outbound call
+        var call = client.InitiateOutboundCall(
+            phonenumber, // The number of the phone initiating the call
+            "5101234567", // The number of the phone receiving call
+            "http://demo.twilio.com/welcome/voice/" // The URL Twilio will request when the call is answered
+        );
+        Response.Write(string.Format("Started call: {0}", call.Sid));
+    } catch (Exception e) {
+        Response.Write(string.Format("Error: {0}", e.Message));
+    }    
+}
+
+
